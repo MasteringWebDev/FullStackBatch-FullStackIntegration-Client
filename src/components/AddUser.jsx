@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios'
 
-function AddUser({ fetchUsers, editMode, editUser, resetToNormalMode }) {
+import { useDispatch } from 'react-redux'
+import { addUser, updateUser } from '../store/actions/user'
+
+function AddUser({ editMode, editUser, resetToNormalMode }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [age, setAge] = useState('')
-  const API_URL = import.meta.env.VITE_API_URL
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if(editUser) {
@@ -16,44 +19,31 @@ function AddUser({ fetchUsers, editMode, editUser, resetToNormalMode }) {
     }
   }, [editUser])
 
+  async function add() {
+    const newUser = {
+      name,
+      email,
+      age
+    }
+    dispatch(addUser(newUser))
+    reset()
+  }
+
+  async function update() {
+    const existingUser = {
+      _id: editUser._id,
+      name,
+      age
+    }
+    dispatch(updateUser(existingUser))
+    reset()
+    resetToNormalMode()
+  }
+
   function reset() {
     setName('')
     setEmail('')
     setAge('')
-  }
-
-  async function addUser() {
-    try {
-      const newUser = {
-        name,
-        email,
-        age
-      }
-      const res = await axios.post(`${API_URL}/users`, newUser)
-      alert(res.data.message)
-      reset()
-      fetchUsers()
-    } catch(error) {
-      alert('Error while creating user')
-      console.log('Error while creating user', error)
-    }
-  }
-
-  async function updateUser() {
-    try {
-      const newUser = {
-        name,
-        age
-      }
-      const res = await axios.patch(`${API_URL}/users/${editUser._id}`, newUser)
-      alert(res.data.message)
-      reset()
-      fetchUsers()
-      resetToNormalMode()
-    } catch(error) {
-      alert('Error while updating user')
-      console.log('Error while updating user', error)
-    }
   }
 
   return (
@@ -86,7 +76,7 @@ function AddUser({ fetchUsers, editMode, editUser, resetToNormalMode }) {
           />
         </Form.Group>
         <Button variant="dark" type="button" 
-          onClick={() => !editMode ? addUser() : updateUser()}
+          onClick={() => !editMode ? add() : update()}
         >
           { !editMode ? 'Add' : 'Update' }
         </Button>

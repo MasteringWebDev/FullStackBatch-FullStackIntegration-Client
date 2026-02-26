@@ -1,7 +1,18 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUsers, deleteUser } from '../store/actions/user'
+
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
-function Users({ users, setEditUser, deleteUser }) {
+function Users({ setEditUser }) {
+  const users = useSelector((store) => store.user.data)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+  }, [])
+
   return (
     <>
       <h1 className='display-3'>Users</h1>
@@ -18,7 +29,7 @@ function Users({ users, setEditUser, deleteUser }) {
                 onClick={() => setEditUser(user)}
               >🖋️</Button>
               <Button variant="danger" size="sm" className='ms-1'
-                onClick={() => deleteUser(user._id)}
+                onClick={() => dispatch(deleteUser(user._id))}
               >🗑️</Button>
             </div>
           </ListGroup.Item>
