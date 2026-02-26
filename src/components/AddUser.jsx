@@ -8,6 +8,7 @@ import { addUser, updateUser } from '../store/actions/user'
 function AddUser({ editMode, editUser, resetToNormalMode }) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [age, setAge] = useState('')
 
   const dispatch = useDispatch()
@@ -23,7 +24,8 @@ function AddUser({ editMode, editUser, resetToNormalMode }) {
     const newUser = {
       name,
       email,
-      age
+      age,
+      password
     }
     dispatch(addUser(newUser))
     reset()
@@ -60,13 +62,22 @@ function AddUser({ editMode, editUser, resetToNormalMode }) {
           />
         </Form.Group>
          { !editMode && (
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Enter your email"
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
+          <>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" placeholder="Enter your email"
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Enter your password"
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+          </>
         )}
         <Form.Group className="mb-3">
           <Form.Label>Age</Form.Label>

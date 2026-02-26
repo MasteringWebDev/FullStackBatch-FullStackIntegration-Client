@@ -9,6 +9,7 @@ import { Container } from 'react-bootstrap'
 
 import Users from './components/Users'
 import AddUser from './components/AddUser'
+import LoginUser from './components/LoginUser'
 
 function App() {
   const [editMode, setEditMode] = useState(false)
@@ -34,6 +35,7 @@ function App() {
           editUser={editUser}
           resetToNormalMode={resetToNormalMode}
         />
+        <LoginUser />
       </Container>
     </Provider>
   )
