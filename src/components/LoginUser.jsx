@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios'
@@ -7,6 +7,11 @@ function LoginUser() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loggedIn, setLoggedIn] = useState(false)
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    getCurrentUser()
+  }, [])
 
   async function login() {
     try {
@@ -16,17 +21,42 @@ function LoginUser() {
       }
       const res = await axios.post(`http://localhost:4000/users/login`, userCreds)
       alert(res.data.message)
-      localStorage.setItem('token', res.data.token)
       setLoggedIn(true)
+      setCurrentUser(res.data.data.name)
     } catch(error) {
       alert('Something went wrong!')
       console.log('Something went wrong', error)
     }
   }
 
+  async function logout() {
+    try {
+      const res = await axios.post(`http://localhost:4000/users/logout`)
+      alert(res.data.message)
+      setLoggedIn(false)
+      setCurrentUser('')
+    } catch(error) {
+      alert('Something went wrong!')
+      console.log('Something went wrong', error)
+    }
+  }
+
+  async function getCurrentUser() {
+    try {
+      const res = await axios.get(`http://localhost:4000/users/current-user`)
+      setLoggedIn(true)
+      setCurrentUser(res.data.data.name)
+    } catch(error) {
+      console.log('Something went wrong', error)
+    }
+  }
+
   if(loggedIn) {
     return (
-      <h1>You are currently logged in</h1>
+      <div>
+        <p className='lead'>Welcome, {currentUser}!</p>
+        <Button variant="danger" onClick={logout}>Logout</Button>
+      </div>
     )
   }
 

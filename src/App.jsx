@@ -27,6 +27,9 @@ function App() {
   return (
     <Provider store={store}>
       <Container className='mt-5'>
+        <hr />
+        <LoginUser />
+        <hr />
         <Users 
           setEditUser={setEditUser}
         />
@@ -35,7 +38,6 @@ function App() {
           editUser={editUser}
           resetToNormalMode={resetToNormalMode}
         />
-        <LoginUser />
       </Container>
     </Provider>
   )

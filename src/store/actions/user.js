@@ -46,8 +46,7 @@ export const updateUser = (existingUser) => {
   return async (dispatch) => {
     try {
       dispatch(setUsersLoading())
-      await axios.patch(`http://localhost:4000/users/${existingUser._id}`,      existingUser, 
-        { headers: { token: localStorage.getItem('token') } })
+      await axios.patch(`http://localhost:4000/users/${existingUser._id}`, existingUser)
       dispatch(fetchUsers())
     } catch(error) {
       alert(error.message)
@@ -60,8 +59,7 @@ export const deleteUser = (userId) => {
   return async (dispatch) => {
     try {
       dispatch(setUsersLoading())
-      await axios.delete(`http://localhost:4000/users/${userId}`, 
-        { headers: { token: localStorage.getItem('token') } })
+      await axios.delete(`http://localhost:4000/users/${userId}`)
       dispatch(fetchUsers())
     } catch(error) {
       alert(error.message)
